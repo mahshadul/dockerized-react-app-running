@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t mahshadul/docker-react-app -f Dockerfile.dev .
+  
+script:
+  - docker run mahshadul/docker-react-app npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "dockerized-react-app"
+  env: "DockerizedReactApp-env"
+  bucket_name: "elasticbeanstalk-us-east-1-947233605766"
+  bucket_path: "dockerized-react-app"
+  on:
+    branch: master
+  access_key_id: 
+    secure: "$AWS_ACCESS_KEY"
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
